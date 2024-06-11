@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model name="Rac_PAK" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#">
+    <!--
+*******************************************************
+***         U   N   I   T   S                       ***
+*******************************************************
+-->
+    <units name="uM">
+        <unit prefix="micro" units="mole"/>
+        <unit exponent="-1" units="litre"/>
+    </units>
+    <units name="per_s">
+        <unit exponent="-1" units="second"/>
+    </units>
+    <units name="uM_per_s">
+        <unit units="uM"/>
+        <unit exponent="-1" units="second"/>
+    </units>
+    <!--
+*********************************************************
+***       C   O   M   P   O   N   E   N   T   S       ***
+*********************************************************
+-->
+    <component name="environment">
+        <variable name="t" public_interface="out" units="second"/>
+    </component>
+    <component name="RacPAK">
+        <variable name="t" public_interface="in" units="second"/>
+        <variable name="J21" units="uM_per_s"/>
+        <variable name="J23" units="uM_per_s"/>
+        <variable name="J25" units="uM_per_s"/>
+        <variable name="J26" units="uM_per_s"/>
+        <!--Estimation start-->
+        <variable initial_value="41.7342" name="k_f21" units="per_s"/>
+        <variable initial_value="17.2669" name="K_21" units="uM"/>
+        <variable initial_value="0.283667" name="k_f23" units="per_s"/>
+        <variable initial_value="36.2813" name="K_23" units="uM"/>
+        <variable initial_value="0.0722305" name="k_f25" units="per_s"/>
+        <variable initial_value="76.6875" name="K_25" units="uM"/>
+        <variable initial_value="0.000469954" name="k_f26" units="per_s"/>
+        <variable initial_value="4" name="RacGDP" units="uM"/>
+        <variable initial_value="6.5" name="PAK" units="uM"/>
+        <variable initial_value="0.001" name="GAP" units="uM"/>
+        <!--Estimation end-->
+        <variable initial_value="0" name="RacGTP" units="uM"/>
+        <variable initial_value="1" name="total_pvav" units="uM_per_s"/>
+        <variable initial_value="0" name="PAKa" public_interface="out" units="uM"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>J21</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_f21</ci>
+                        <ci>RacGDP</ci>
+                        <ci>total_pvav</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>K_21</ci>
+                        <ci>RacGDP</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>J23</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_f23</ci>
+                        <ci>RacGTP</ci>
+                        <ci>GAP</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>K_23</ci>
+                        <ci>RacGTP</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>J25</ci>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <times/>
+                        <ci>k_f25</ci>
+                        <ci>RacGTP</ci>
+                        <ci>PAK</ci>
+                    </apply>
+                    <apply>
+                        <plus/>
+                        <ci>K_25</ci>
+                        <ci>PAK</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>J26</ci>
+                <apply>
+                    <times/>
+                    <ci>k_f26</ci>
+                    <ci>PAKa</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>RacGDP</ci>
+                </apply>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
+                        <ci>J21</ci>
+                    </apply>
+                    <ci>J23</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>total_pvav</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>J21</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>RacGTP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>J21</ci>
+                    <ci>J23</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>GAP</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>J23</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>PAK</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>J25</ci>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>t</ci>
+                    </bvar>
+                    <ci>PAKa</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <ci>J25</ci>
+                    <ci>J26</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="RacPAK" component_2="environment"/>
+        <map_variables variable_1="t" variable_2="t"/>
+    </connection>
+</model>
